@@ -1,6 +1,9 @@
 # Final-Projecct
 Instacart dashboard
 
+
+Please for the Report of this project click [here](http://rpubs.com/isdikov/493840)
+
 Data description
 The original data is quite extensive, and the data linked to at the top of this page for use in the class represents a cleaned and limited version of the data. The dataset contains 1,384,617 observations of 131,209 unique users, where each row in the dataset is a product from an order. There is a single order per user in this dataset.
 
