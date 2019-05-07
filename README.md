@@ -26,3 +26,4 @@ aisle_id: aisle identifier
 department_id: department identifier
 aisle: the name of the aisle
 department: the name of the department
+[link](https://drive.google.com/file/d/1_VDO8gex_QHaup5eeoiwgIjWtkXsR5Gn/view?usp=sharing)
