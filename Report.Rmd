@@ -1,0 +1,338 @@
+---
+title: "Final Project: Instacart Shinydashboard  Report"
+author: "Group 3"
+date: "May 6, 2019"
+output: html_document
+---
+If you are interested, see shinydashboard [here](https://ibrokhim-sadikov.shinyapps.io/Final/)
+For reproductible code of this app you can access github repo [here](https://github.com/Ibrokhimsadikov/Final-Projecct).
+
+##Introduction: Domain problem characterization              
+
+As the final project we were asked to deliver shiny enabled application to focus on a particular scenario to work with. Hence, as the requirement states, we will be focusing on particular dataset to design and build our shiny app for the specific business requirement. 
+In this regard, we choose to work with Instacart Grocery Dataset. Instacart is an American company that offers same day grocery delivery services. Customers are able to go in through an app or web page and pick grocery they need, and a shopper will pick them up at a grocery store and deliver it to your house in little as an hour. Instacart is marketed towards people who are very busy and have very little time to go grocery shopping. They partner with local grocery stores. Our shiny app is geared towards users in supply chain and sales at a grocery store that gets heavy Instacart shoppers' traffic. This app will help them to make predictions on what they need to have stocked during which day of the week. We will be analyzing the trends at which products are sold most and when. This will help them make a decision on when they need to buy certain products so they don't lose out on business or they don't overstock certain products. Moreover, sales team could draw their conclusions and use our app to make data driven sales decisions and build more targeted marketing strategies. Please see Appendix section for any reference of the discussed content examples.
+
+##Data/operation abstraction design
+
+"The Instacart Online Grocery Shopping Dataset 2017" is an anonymized dataset with over 3 million online grocery orders from more than 200,000 Instacart users. However, the dataset does not represent a random sampling of products, users, or purchases. Therefore, while the data allow examination of trends in online grocery purchasing, the results may not be generalizable to Instacart users more broadly.
+
+"The Instacart Online Grocery Shopping Dataset 2017" post in Medium provides some summary results of interesting findings [link here](https://tech.instacart.com/3-million-instacart-orders-open-sourced-d40d29ead6f2), including: 
+
+.	Fruits are reordered more frequently than vegetables
+.	Soups and baking ingredients are least likely to be reordered
+.	Healthier snacks and staples tend to be purchased earlier in the day
+.	Ice cream and frozen pizza are the most frequently ordered products late at night
+
+The original version of dataset can be found [here](https://www.instacart.com/datasets/grocery-shopping-2017 ): "The Instacart Online Grocery Shopping Dataset 2017", Accessed from https://www.instacart.com/datasets/grocery-shopping-2017 on May 6, 2019
+
+The version of the Instacart data that we will use in this project can be found [here](https://p8105.com/dataset_instacart.html):
+
+The original data is quite extensive, and the data linked above is for use in this project represents a cleaned and limited version of the data. The dataset contains 1,384,617 observations of 131,209 unique users, where each row in the dataset is a product from an order. There is a single order per user in this dataset.
+
+There are 15 variables in this dataset:
+.	order_id: order identifier
+.	product_id: product identifier
+.	add_to_cart_order: order in which each product was added to cart
+.	reordered: 1 if this prodcut has been ordered by this user in the past, 0 otherwise
+.	user_id: customer identifier
+.	eval_set: which evaluation set this order belongs in (Note that the data for use in this class is exclusively from the "train" eval_set)
+.	order_number: the order sequence number for this user (1=first, n=nth)
+.	order_dow: the day of the week on which the order was placed
+.	order_hour_of_day: the hour of the day on which the order was placed
+.	days_since_prior_order: days since the last order, capped at 30, NA if order_number=1
+.	product_name: name of the product
+.	aisle_id: aisle identifier
+.	department_id: department identifier
+.	aisle: the name of the aisle
+.	department: the name of the department
+
+##Encoding/Interaction design
+
+It is very significant part of our project design process. Our main goal is to use encodings that people decode better and faster. Therefore, we made an extensive research and analysis of different web application that were designed specifically for grocery sales analytics. The most important component of our app is not only delivering information from data but also effectively visualize so that the user can easily detect any anomalies in sales figures. Once we negotiated what specific exploratory analysis we will embed to our app, we challenged and questioned ourselves about which visualization to choose to reach the most effective use case. Additional concerns include choosing appropriate encoding parameters (log scale, sorting, .) and data transformations (bin, group, aggregate, .). Even though the dataset was very clean, we had to go through some data transformation to encode better and rolled-up insights (the file named DataWrangling.Rmd, contains all the transformation we made). For example, the days of the week were given as numeric (0, 1,2,3,4,5,6) rather than string (Mon, Wed, Fri.) which would confuse the user to identify which days are presented in the chart. Moreover, we divided the add_to_cart_order variable which determines the priority level of the product put in to the cart in to 5 groups namely, Highest, High, Medium, Low and Lowest. This significantly increased observability of the pattern as the dataset originally encoded it in the range of 1-80. 
+Rarely does a single visualization answer all questions. Instead, the ability to generate appropriate visualizations quickly is critical. Also, using interaction to generate relevant views is important. Using treemap to visualize sales data was amazing however was not effective in the case of treemap function in R. Yes, it presented the information we wanted but not in effective manner. The user would definitely be lost in understanding the chart. Therefore, we went to better and more interaction enabled D3 visualization framework. At the end of the day, the visualization was amazing and highly interactive. Please refer to Appendix for visual example.  
+
+##Algorithmic design
+An algorithm is a series of instructions often referred to as a "process," which is to be followed when solving a particular problem. In the case of grocery shopping app which are focused on we will use iterative process to build our app. After agreeing on the subject matter and on what item sets include on our app menu, we started to move further to use agile environment to make things work. First of we tried to build our all fundamental visualization charts on Rmarkdown. as it is more straightforward for experiencing different tools and chart types rather than shiny itself. At the same time, we built the layout of the shiny and completed UI side. Once, we tested the code and chart functionality we moved it to server side and tested whether everything works appropriately. If any bugs are detected, the cycle starts from the beginning and moves periodically again.
+
+
+##User evaluation
+Our shiny app is designed to serve particular needs of predetermined user group. As we have already stated above mainly sales managers and supply chain managers are those for whom this app is designed for.  Therefore, it is particularly significant to carry out user evaluation test to understand how this app affects their users, under what conditions, it satisfies the users' needs, if it responds to their expectations and if users can effectively draw some benefit from the activity. Therefore, we address   Mazza's 5 evaluation criteria to conduct our evaluation process.
+
+###Functionality: 
+In terms of functionality, we met the desired expectation of product owner. To articulate in detail, we designed our app to meet three main functionality criteria, namely Order Level Analysis, Department Level Analysis and Market Basket Analysis. So, users would definitely will have opportunity to easily leverage their analytical process to answer their the most important business questions: How we are selling? What we are selling most? What marketing and inventory strategies could we offer executive management?  
+
+###Effectiveness:
+Even if we critically look at the app design and information delivery process, I would say in the worst case we met our client's needs. We on purpose made a great effort to use mainly interactive visualization tools to have better functionality. For example, we avoided using Rstudio's tree map and tried our best to bring D3's zoomable interactive tree map which is far more user friendly and effective in delivering right information in clear and clean way. Moreover, when we performed Association rule mining for our market basket analysis using arulesvis, our network graph was very poor in terms of clear information delivery. In other words, the user would be lost in the process of knowledge discovery through network and would definitely be annoyed. Therefore, we addressed amazing htmlwidget called VisNetwork to add more interactivity to our graph even though we had to conduct extra work transferring our results from arulesvis package to visnetwork.
+
+###Efficiency:
+I would say that our app is just a prototype and even though it runs sufficiently fast to conduct all desired tasks, I can't assure whether it is faster than other similar tools. I would say that shinyapp has some limitations. We used relatively smaller data which is about 135 Mb, and I would say that using bigger data would definitely hinder the efficiency of the app. In other words, we implemented several interactive charts and some heavy calculations where shinyapp server would slow down when much bigger data is used. For example, for rule mining we need transactional dataset, but our data was not transactional data. So, to convert the raw data to transactional data was very time consuming taking into account the volume of the data. Also, when we were changing support and confidence variables to smaller values, like 0,00001, to find rules for our market basket analysis, it took way more time to process the output. In conclusion, I would say that if we use more advanced interactive charts and implement interactive model analysis features to give the user more capability to play with numbers, Shiny app would definitely lose its efficiency.
+###Usability:
+We intended to make our app significantly user-friendly and I think we were able to achieve that as the app is intuitive and straightforward to use.
+
+###Usefulness: 
+As we stated the users are able to analyze the main sales patterns in grocery sales through our analysis. Through our Order analysis menu, they can draw conclusion on customer traffic while department level analysis give them clear overview of which department performing better than others and how products are sold in those departments. Moreover, Market basket analysis gives extra performance analytical advantage to better see patterns in customer buying behavior.
+
+
+##Future Work
+
+Through this project, we accomplished our main intendent goals. However, there are a few more improvements can be done to improve the functionality and effectiveness of the app. Due to limited personal skill set and project delivery time frame, we could not leverage all our expectation in building the app. In the future, we would like to embed html tools to our app to create a homepage to improve the UI of the app. Moreover, our app is mostly in static mode. We would like to make it more dynamic where user can right away pull the data from database and bring it to our app and perform the analysis with the click of a button. Other than that, most of our charts are interactive, but not all the parts of it is reactive. Hence, we would like to embed more reactivity to our app especially to Market basket analysis part so that users can try to play with different support and confidence thresholds to discover optimal level of rules. Also, it would be advantageous to use r2d3 package in R, as using ready to go htmlwidgets  may not always be compatible. For example, while using D3TreeR and Billboarder.js packages, we had to suffer from implementing both of these awesome graphics in our app, as these two packages conflicted with D3 versions. Therefore, some of the functionality issues were arisen. Moreover, as a new R user, we had to go through many challenges starting from data preparation to implementing our design to app. There were so many challenges that we encountered that the content of this report is not enough to elaborate through. Overall, I would say that we learnt more things that did not work then did work, which I think is also a big learning curve for us.  It was challenging and sometime annoying but it did worth it as we enjoyed learning so much.
+
+
+
+#APPENDIX
+
+Loading all required packages
+```{r setup, include=FALSE}
+library(tidyverse)
+library(dplyr)
+library(treemap)
+library(d3treeR)
+library(data.table) 
+library(plotly)
+library(DT)
+library(visNetwork)
+library(igraph)
+library(knitr)
+library(arules)
+library(arulesViz)
+library(RColorBrewer)
+library(morrisjs)
+
+```
+
+We are using fread function as it is very time efficient rather than read.csv
+```{r }
+insta <- fread("./insta_ready.csv")
+
+```
+
+As you can see the sales map drawn below is given with two version one with treemap and one with d3tree2.
+Unquestionably, D3tree is way more interactive and kneat. Regding sales we can see that Produce departent makes up big proportion of sales
+```{r }
+
+tree1 <- insta %>% 
+  group_by(department, aisle) %>% 
+  summarize(n=n())
+ treemap(tree1,
+    index = c("department","aisle")
+    ,vSize = "n"
+    ,type = "index"
+    ,fun.aggregate = "weighted.mean", palette='Set3', height=700, width=700
+  ) %>%
+  d3tree2( rootname = "General" )
+```
+
+The code below describes how many unique products in each departmetn category. We can see that even though produce has way less product variety its sales is more than personal care as an example.
+```{r }
+
+tree2<-insta %>% 
+  distinct(product_name, .keep_all = TRUE)%>%
+  group_by(department, aisle) %>% 
+  summarize(n=n())
+
+treemap(tree2,
+    index = c("department","aisle")
+    ,vSize = "n"
+    ,type = "index"
+    ,fun.aggregate = "weighted.mean", palette='Set3', height=700, width=700
+  ) %>%
+  d3tree2( rootname = "General" )
+```
+
+Heatmap Below is very effective visualization tool to describe patterns in how sales traffic is changing with regard hour of the day and day of the week.
+```{r }
+orders_heat= insta%>% group_by(order_dow, order_hour_of_day)%>%
+  summarise(Order_number=n())
+
+```
+
+
+```{r }
+
+plot_ly(x =orders_heat$order_hour_of_day,  y =orders_heat$order_dow, z = orders_heat$Order_number, type = "heatmap", colors='YlOrRd')
+  
+```
+
+
+
+As we can see weekends are the busiest days of the week
+```{r }
+k<-insta%>%
+  group_by(order_dow)%>%
+  summarize(count=n())
+
+
+  plot_ly(x=k$order_dow, y=k$count, type='bar')
+```
+
+```{r}
+
+
+```
+
+
+
+
+
+
+
+We can conclude that sales are significantly more startign 8 am to 7 pm
+```{r }
+h<-insta%>%
+  group_by(order_hour_of_day)%>%
+  summarize(count=n())
+as.character(h$order_hour_of_day)
+
+plot_ly(x=h$order_hour_of_day, y=h$count, type='bar')
+
+ 
+```
+
+
+
+We grouped the add to cart priority level in to 5 categories as we can see, most of the goods in produce department are in the Highest priority.
+```{r }
+insta%>%
+  filter(department=='produce')%>%
+  group_by(reordered)%>%
+  summarize(count=n())%>%
+  plot_ly(x=~reordered, y=~count,  type='bar', marker = list(
+      color = 'green'))
+ 
+insta%>%
+  filter(department=='produce')%>%
+  group_by(add_to_cart_order)%>%
+ summarize(count=n())%>%
+plot_ly(x=~add_to_cart_order, y=~count,  type='bar', marker = list(
+      color = 'orange'))
+
+
+
+```
+
+We will use the following donut chart to make our dashboard in shiny app
+
+```{r}
+
+cool<-insta%>%
+  filter(department=='produce')%>%
+  group_by(aisle)%>%
+ summarize(count=n())
+
+morrisjs(cool) %>% 
+  mjsDonut(options=list(colors=RColorBrewer::brewer.pal(n=9, name = "Set1")))
+           
+                       
+
+
+
+```
+
+
+As our data is not transactional. we need to convert it into transactional data. Which we will do using below encoding procedure
+```{r }
+# get the shopping baskets
+order_baskets <- insta %>% 
+  select(order_id, product_name) %>% 
+  group_by(order_id) %>%
+  summarise(basket = as.vector(list(product_name)))
+order_baskets
+
+```
+
+
+```{r }
+transactions <- as(order_baskets$basket, "transactions")
+transactions
+
+```
+
+
+Below is top 20 bestsellers and interestingly most of them are organic products.
+```{r}
+
+itemFrequencyPlot(transactions,topN=20,type="absolute")
+
+
+```
+
+
+```{r include=FALSE}
+
+
+rules1 <- apriori(transactions, parameter = list(supp = 0.003269976, conf = 0.0001, maxlen=3), control = list(verbose = FALSE))
+
+
+```
+
+In R : arules package which implements the apriori algorithm  can be used for analyzing the customer shopping basket .It requires 2 parameter to be set which are Support measures how frequently a pattern occurs in the data (how often a certain set of items are bought together) Confidence: How strong an association rule is .It is the frequency of occurrence of the right-hand items in the rule from among those baskets that contain the items on the left-hand side of the rule. E.g. with what confidence we can say if customer has purchased item A is likely to purchase B.
+
+
+```{r}
+
+
+
+plotly_arules(rules1)
+
+```
+
+
+Typically the output of an MBA is in the form of rules.  The rules can be simple {A ==> B}, when a customer buys item A then it is (very) likely that the customer buys item B. More complex rules are also possible if {A, B ==> "Then" D, F}, when a customer buys items A and B then it is likely that he buys items D and F.
+
+```{r}
+subrules2 <- head(sort(rules1, by="confidence"),20)
+ig <- plot( subrules2, method="graph", control=list(type="items") )
+
+```
+
+
+However of particular interest is visualization of the associations via VisNetwork package in R (Credits: Longhow Lam). Also big credit to Neha Sharma for her amazing work in analyzing and visualizing with VisNetwork.  
+
+In this Vis each node represents product in shopping basket and each rule "from ==> to" is an edge of the graph
+
+Read the graph as below if a customer purchases banana he is likely to buy Low Fat Strawberry Banana, Sliced peaches etc.
+
+```{r}
+ig_df <- get.data.frame( ig, what = "both" )
+nodesv <- data.frame(
+  id = ig_df$vertices$name
+  ,value = ig_df$vertices$support # could change to lift or confidence
+  ,title = ifelse(ig_df$vertices$label == "",ig_df$vertices$name, ig_df$vertices$label)
+  ,ig_df$vertices
+) 
+
+edgesV = ig_df$edges
+```
+
+```{r}
+visNetwork(nodes = nodesv, edges = edgesV, width = 900, height = 700) %>%
+  visNodes(size = 10) %>%
+  visLegend() %>%
+  visEdges(smooth = FALSE) %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visInteraction(navigationButtons = TRUE) %>%
+  visEdges(arrows = 'from') %>%
+  visPhysics(
+    solver = "barnesHut",
+    maxVelocity = 35,
+    forceAtlas2Based = list(gravitationalConstant = -6000)
+  )
+
+
+
+
+```
+
+
+
+
+```{r}
+###   Frequent Item Sets #####
+support <- 0.008
+itemsets <- apriori(transactions, parameter = list(target = "frequent itemsets", supp=support, minlen=2), control = list(verbose = FALSE))
+
+par(mar=c(5,18,2,2)+.1)
+sets_order_supp <- DATAFRAME(sort(itemsets, by="support", decreasing = F))
+barplot(sets_order_supp$support, names.arg=sets_order_supp$items, xlim=c(0,0.02), horiz = T, las = 2, cex.names = .8, main = "Frequent Itemsets")
+mtext(paste("support:",support), padj = .8)
+```
