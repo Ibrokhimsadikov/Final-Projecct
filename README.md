@@ -26,4 +26,10 @@ aisle_id: aisle identifier
 department_id: department identifier
 aisle: the name of the aisle
 department: the name of the department
-[link](https://drive.google.com/file/d/1_VDO8gex_QHaup5eeoiwgIjWtkXsR5Gn/view?usp=sharing)
+
+Once again you have two options, 
+First, go to the above link for the train dataset and run it through DataWrangling.Rmd, to make necesserary transformation for shiny part
+and save it as insta_ready.csv.
+
+Or, you can download the already transformed data insta_ready.csv from the link below. As github has limited storage offering, I was not able to store the big dataset here. Then you can easliy access that file and download it to your PC and run the shiny app from the reproductible code provided
+[link for insta_ready.csv](https://drive.google.com/file/d/1_VDO8gex_QHaup5eeoiwgIjWtkXsR5Gn/view?usp=sharing)
