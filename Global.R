@@ -17,13 +17,15 @@ library(igraph)
 library(RColorBrewer)
 library(billboarder)#for D3.js charts
 library(shinyWidgets)
+
+
 # we'll need the development version of data.tree. If you do not have, install it
 #devtools::install_github("gluc/data.tree")
 #remotes::install_github("d3treeR/d3treeR")
 
 #read/import the file  that we use 
 insta <- fread("./insta_ready.csv")
-
+#tr <- read.transactions('./transactions.csv', format = 'basket', sep=',')
 #PREPARE DATA FOR DRAWING 1ST AND 2ND MENUITEMS TREEMAPS
 
 tree1<-insta %>% 
@@ -48,7 +50,7 @@ order_baskets <- insta %>%
   summarise(basket = as.vector(list(product_name)))
 transactions <- as(order_baskets$basket, "transactions")
 rules1 <- apriori(transactions, parameter = list(supp = 0.003269976, conf = 0.01, maxlen=3), control = list(verbose = FALSE))
-
+#rules_table1<-data.table(lhs=labels(lhs(rules1)), rhs=(labels(rhs(rules1))), quality(rules1))
 
 ###   Frequent Item Sets #####
 support <- 0.008
@@ -56,7 +58,6 @@ itemsets <- apriori(transactions, parameter = list(target = "frequent itemsets",
 
 par(mar=c(5,18,2,2)+.1)
 sets_order_supp <- DATAFRAME(sort(itemsets, by="support", decreasing = F))
-
 
 
 
