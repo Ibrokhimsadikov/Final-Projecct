@@ -2,6 +2,71 @@
 Instacart dashboard
 
 
+LOGO_IMAGE = "anima5.gif"
+
+    st.markdown(
+        """
+        <style>
+        .container {
+            display: flex;
+        }
+        .logo-text {
+            
+            font-weight:525 !important;
+            font-size:45px !important;
+            color: #3298e6 !important;
+            padding-top: 115px !important;
+            
+        }
+        .logo-img {
+            width: 400px;
+            height: 350px;
+            padding-top: -2rem;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.markdown(
+        f"""<div class="container">
+            <img class="logo-img" src="data:image/gif;base64,{base64.b64encode(open(LOGO_IMAGE, "rb").read()).decode()}">
+            <p class="logo-text">Radiology Information Extraction Toolkit</p>
+            </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Please for the Report of this project click [here](http://rpubs.com/isdikov/493840)
 For the original source of the train dataset used for this project click [here](https://p8105.com/dataset_instacart.html)
 To see the shinydashboard [click here](https://ibrokhim-sadikov.shinyapps.io/Final/)
