@@ -1,3 +1,4 @@
+```
 @Language.factory("ijoinentity")
 class EntityRetokenizeComponent:
     def __init__(self, nlp:Language, name:str):
@@ -15,3 +16,4 @@ class EntityRetokenizeComponent:
                     new_ents.append(ent)
             doc.ents =filter_spans(new_ents+ list(doc.ents))
         return doc
+        ```
