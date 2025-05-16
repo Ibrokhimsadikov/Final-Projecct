@@ -1,22 +1,18 @@
+98% of our user sessions are 50 tokens or fewer, but we're currently using a max sequence length of 128. This leads to excessive padding in most inputs, wasting memory and compute. Since padding tokens are ignored during attention and don’t contribute to learning, they slow training without benefit. Reducing the max length to 64 would significantly improve efficiency while still covering the vast majority of sessions.
+
 import pandas as pd
-import matplotlib.pyplot as plt
 
-# Assuming your DataFrame is called df and the column is 'session_length'
-lengths = df['session_length'].sort_values()
+# Example: df['session_length'] contains the length of each session
+lengths = df['session_length']
 
-# Compute cumulative distribution
-cum_dist = lengths.rank(pct=True).values  # percentile rank
-sorted_lengths = lengths.values
+# Count how many sessions fall under each threshold
+count_64 = (lengths <= 64).sum()
+count_128 = (lengths <= 128).sum()
+count_512 = (lengths <= 512).sum()
 
-# Plot cumulative distribution
-plt.figure(figsize=(8, 5))
-plt.plot(sorted_lengths, cum_dist)
-plt.xlabel("Session Length (number of tokens)")
-plt.ylabel("Cumulative Proportion")
-plt.title("Cumulative Distribution of Session Lengths")
-plt.grid(True)
-plt.show()
+total_sessions = len(df)
 
-length_95 = lengths.quantile(0.95)
-print(f"95% of sessions are shorter than or equal to: {int(length_95)} tokens")
-
+# Print percentages
+print(f"Sessions ≤ 64 tokens:  {count_64} ({100 * count_64 / total_sessions:.2f}%)")
+print(f"Sessions ≤ 128 tokens: {count_128} ({100 * count_128 / total_sessions:.2f}%)")
+print(f"Sessions ≤ 512 tokens: {count_512} ({100 * count_512 / total_sessions:.2f}%)")
