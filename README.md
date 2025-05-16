@@ -1,14 +1,8 @@
-import pandas as pd
+def has_space_token(token_list):
+    return any(" " in str(token) for token in token_list)
 
-# Assuming your DataFrame is df and session lengths are in 'session_length'
-lengths = df['session_length']
+df['has_space'] = df['Session_sequence_pages'].apply(has_space_token)
 
-# Define the buckets
-bucket_1 = (lengths <= 64).sum()
-bucket_2 = ((lengths > 64) & (lengths <= 128)).sum()
-bucket_3 = ((lengths > 128) & (lengths <= 512)).sum()
-
-# Print results
-print(f"Sessions ≤ 64:             {bucket_1}")
-print(f"Sessions 65–128:          {bucket_2}")
-print(f"Sessions 129–512:         {bucket_3}")
+# How many sessions have at least one token with a space?
+num_with_spaces = df['has_space'].sum()
+print(f"Sessions with tokens containing spaces: {num_with_spaces}")
